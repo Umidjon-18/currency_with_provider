@@ -6,7 +6,7 @@ import '../../utils/constants.dart';
 import '../../utils/routes.dart';
 
 Widget itemExch(BuildContext context, TextEditingController controller, CurrencyModel? model,
-      FocusNode focusNode, Function callback, compareProvider) {
+      FocusNode focusNode, Function callback, provider) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -37,9 +37,9 @@ Widget itemExch(BuildContext context, TextEditingController controller, Currency
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, Routes.currencyPage,
                     arguments: {
-                      'list_curreny': compareProvider.listCurrency,
-                      'top_cur': compareProvider.topCur?.ccy,
-                      'bottom_cur': compareProvider.bottomCur?.ccy
+                      'list_curreny': provider.listCurrency,
+                      'top_cur': provider.topCur?.ccy,
+                      'bottom_cur': provider.bottomCur?.ccy
                     }).then(((value) => callback(value))),
                 child: Container(
                   padding: const EdgeInsets.all(7),

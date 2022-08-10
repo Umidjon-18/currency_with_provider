@@ -10,6 +10,11 @@ class CurrencyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  clear() {
+    filterList.clear();
+    editingController.clear();
+  }
+
   onDispose() {
     editingController.dispose();
   }

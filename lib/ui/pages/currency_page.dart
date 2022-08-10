@@ -20,12 +20,7 @@ class CurrencyPage extends StatefulWidget {
 }
 
 class _CurrencyPageState extends State<CurrencyPage> {
-  CurrencyProvider currencyProvider = CurrencyProvider();
-  @override
-  void initState() {
-    super.initState();
-    currencyProvider.filterList.addAll(widget._listCurrency);
-  }
+  late CurrencyProvider currencyProvider = CurrencyProvider();
 
   @override
   void dispose() {
@@ -37,13 +32,17 @@ class _CurrencyPageState extends State<CurrencyPage> {
   Widget build(BuildContext context) {
     return Consumer<CurrencyProvider>(
       builder: (BuildContext context, provider, Widget? child) {
+        Future.delayed(Duration.zero, () {
+          provider.filterList.addAll(widget._listCurrency);
+          provider.updatePage();
+        });
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color(0xff1f2235),
             elevation: 0,
             automaticallyImplyLeading: false,
             title: TextField(
-              controller: currencyProvider.editingController,
+              controller: provider.editingController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -64,12 +63,11 @@ class _CurrencyPageState extends State<CurrencyPage> {
                     fontWeight: FontWeight.w500),
                 suffixIcon: IconButton(
                   onPressed: () {
-                    if (currencyProvider.editingController.text.isEmpty) {
+                    if (provider.editingController.text.isEmpty) {
                       Navigator.pop(context);
                     } else {
-                      currencyProvider.editingController.clear();
-                      currencyProvider.filterList.clear();
-                      currencyProvider.filterList.addAll(widget._listCurrency);
+                      provider.clear();
+                      provider.filterList.addAll(widget._listCurrency);
                       provider.updatePage();
                     }
                   },
@@ -78,18 +76,18 @@ class _CurrencyPageState extends State<CurrencyPage> {
               ),
               style: kTextStyle(size: 16, fontWeight: FontWeight.w500),
               onChanged: (value) {
-                currencyProvider.filterList.clear();
+                provider.filterList.clear();
                 if (value.isNotEmpty) {
                   for (final item in widget._listCurrency) {
                     if (item.ccy!.toLowerCase().contains(value.toLowerCase()) ||
                         item.ccyNmEn!
                             .toLowerCase()
                             .contains(value.toLowerCase())) {
-                      currencyProvider.filterList.add(item);
+                      provider.filterList.add(item);
                     }
                   }
                 } else {
-                  currencyProvider.filterList.addAll(widget._listCurrency);
+                  provider.filterList.addAll(widget._listCurrency);
                 }
                 provider.updatePage();
               },
@@ -100,7 +98,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               itemBuilder: ((context, index) {
-                var model = currencyProvider.filterList[index];
+                var model = provider.filterList[index];
                 bool isChosen =
                     widget.topCur == model.ccy || widget.bottomCur == model.ccy;
                 return ListTile(
@@ -149,7 +147,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
                 );
               }),
               separatorBuilder: (context, index) => const SizedBox(height: 15),
-              itemCount: currencyProvider.filterList.length),
+              itemCount: provider.filterList.length),
         );
       },
     );

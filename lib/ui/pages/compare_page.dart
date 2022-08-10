@@ -16,7 +16,7 @@ class ComparePage extends StatefulWidget {
 }
 
 class _ComparePageState extends State<ComparePage> with HiveUtil {
-  late CompareProvider compareProvider =CompareProvider();
+  late CompareProvider compareProvider = CompareProvider();
 
   @override
   void dispose() {
@@ -28,10 +28,10 @@ class _ComparePageState extends State<ComparePage> with HiveUtil {
   Widget build(BuildContext context) {
     return Consumer<CompareProvider>(builder: (context, provider, child) {
       if (provider.state == ComparePageState.isInit) {
-        Future.delayed(Duration.zero,(){
-        provider.focuseChecker();
-        provider.loadData();
-  });
+        Future.delayed(Duration.zero, () {
+          provider.focuseChecker();
+          provider.loadData();
+        });
       }
       return Scaffold(
           backgroundColor: const Color(0xff1f2235),
@@ -57,7 +57,8 @@ class _ComparePageState extends State<ComparePage> with HiveUtil {
                             children: [
                               Text(
                                 'Exchange',
-                                style: kTextStyle(size: 16, fontWeight: FontWeight.w600),
+                                style: kTextStyle(
+                                    size: 16, fontWeight: FontWeight.w600),
                               ),
                               IconButton(
                                 onPressed: () {},
@@ -75,7 +76,10 @@ class _ComparePageState extends State<ComparePage> with HiveUtil {
                             children: [
                               Column(
                                 children: [
-                                  itemExch(context, provider.editingControllerTop, provider.topCur,
+                                  itemExch(
+                                      context,
+                                      provider.editingControllerTop,
+                                      provider.topCur,
                                       provider.topFocus, ((value) {
                                     if (value is CurrencyModel) {
                                       provider.topCur = value;
@@ -85,7 +89,10 @@ class _ComparePageState extends State<ComparePage> with HiveUtil {
                                   const SizedBox(
                                     height: 15,
                                   ),
-                                  itemExch(context, provider.editingControllerBottom, provider.bottomCur,
+                                  itemExch(
+                                      context,
+                                      provider.editingControllerBottom,
+                                      provider.bottomCur,
                                       provider.bottomFocus, ((value) {
                                     if (value is CurrencyModel) {
                                       provider.bottomCur = value;
