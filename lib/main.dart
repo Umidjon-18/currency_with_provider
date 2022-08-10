@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'data/model/currency_model.dart';
 import 'data/provider/currency_provider.dart';
-import 'ui/pages/compare_page.dart';
 
 void main() async {
   await Hive.initFlutter();

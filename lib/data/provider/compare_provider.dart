@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import '../../utils/constants.dart';
 import '../model/currency_model.dart';
 
+enum ComparePageState { isInit, isBusy, isDone, isError }
+
 class CompareProvider extends ChangeNotifier with HiveUtil {
   final TextEditingController editingControllerTop = TextEditingController();
   final TextEditingController editingControllerBottom = TextEditingController();
@@ -18,6 +20,7 @@ class CompareProvider extends ChangeNotifier with HiveUtil {
   List<CurrencyModel> listCurrency = [];
   CurrencyModel? topCur;
   CurrencyModel? bottomCur;
+  ComparePageState state = ComparePageState.isInit;
 
   focuseChecker() {
     editingControllerTop.addListener(() {
@@ -30,7 +33,6 @@ class CompareProvider extends ChangeNotifier with HiveUtil {
         } else {
           editingControllerBottom.clear();
         }
-        notifyListeners();
       }
     });
     editingControllerBottom.addListener(() {
@@ -43,12 +45,13 @@ class CompareProvider extends ChangeNotifier with HiveUtil {
         } else {
           editingControllerTop.clear();
         }
-        notifyListeners();
       }
     });
   }
 
-  Future<bool?> loadData() async {
+  Future loadData() async {
+    state = ComparePageState.isBusy;
+    notifyListeners();
     var isLoad = await loadLocalData();
     if (isLoad) {
       try {
@@ -67,19 +70,23 @@ class CompareProvider extends ChangeNotifier with HiveUtil {
             await saveBox<List<dynamic>>(currencyBox, listCurrency,
                 key: currencyListKey);
           }
-          return true;
+          state = ComparePageState.isDone;
+          notifyListeners();
         } else {
-          // showMessage('Unknown error', null);
+          state = ComparePageState.isError;
+          notifyListeners();
         }
       } on SocketException {
-        // showMessage('Connection error', null);
+        state = ComparePageState.isError;
+        notifyListeners();
       } catch (e) {
-        // showMessage(e.toString(), null);
+        state = ComparePageState.isError;
+        notifyListeners();
       }
     } else {
-      return true;
+      state = ComparePageState.isDone;
+      notifyListeners();
     }
-    return null;
   }
 
   Future<bool> loadLocalData() async {
@@ -129,5 +136,12 @@ class CompareProvider extends ChangeNotifier with HiveUtil {
 
   updatePage() {
     notifyListeners();
+  }
+
+  onDispose() {
+    editingControllerTop.dispose();
+    editingControllerBottom.dispose();
+    topFocus.dispose();
+    bottomFocus.dispose();
   }
 }

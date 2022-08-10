@@ -35,9 +35,8 @@ class _CurrencyPageState extends State<CurrencyPage> {
 
   @override
   Widget build(BuildContext context) {
-    var data = context.watch<CurrencyProvider>();
     return Consumer<CurrencyProvider>(
-      builder: (BuildContext context, value, Widget? child) {
+      builder: (BuildContext context, provider, Widget? child) {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color(0xff1f2235),
@@ -71,7 +70,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
                       currencyProvider.editingController.clear();
                       currencyProvider.filterList.clear();
                       currencyProvider.filterList.addAll(widget._listCurrency);
-                      data.updatePage();
+                      provider.updatePage();
                     }
                   },
                   icon: const Icon(Icons.clear, color: Colors.white, size: 20),
@@ -92,7 +91,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
                 } else {
                   currencyProvider.filterList.addAll(widget._listCurrency);
                 }
-                data.updatePage();
+                provider.updatePage();
               },
             ),
           ),
