@@ -29,7 +29,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
 
   @override
   void dispose() {
-    currencyProvider.editingController.dispose();
+    currencyProvider.onDispose();
     super.dispose();
   }
 

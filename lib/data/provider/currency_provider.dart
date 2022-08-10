@@ -9,4 +9,8 @@ class CurrencyProvider extends ChangeNotifier {
   updatePage() {
     notifyListeners();
   }
+
+  onDispose() {
+    editingController.dispose();
+  }
 }
